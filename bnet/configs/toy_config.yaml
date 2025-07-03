@@ -1,0 +1,29 @@
+# Dataset Configuration
+dataset:
+  dataset_type: classification  # classification or regression
+  num_samples: 1000
+  num_features: 20
+  num_classes: 2  # Only for classification
+  noise: 0.1
+  test_split_ratio: 0.2
+  random_state: 42
+
+# Model Configuration
+model:
+  input_size: 20
+  hidden_sizes: [64, 32]
+  output_size: 1 # For BCEWithLogitsLoss, or 2 for CrossEntropyLoss
+
+# Training Configuration
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  optimizer: Adam  # Adam or SGD
+  loss_function: BCEWithLogitsLoss # BCEWithLogitsLoss, CrossEntropyLoss, or MSELoss
+
+# General Configuration
+general:
+  device: cpu # cuda or cpu
+  seed: 42
+  log_dir: "runs"
