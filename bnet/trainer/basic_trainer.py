@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard.writer import SummaryWriter
 from tqdm import tqdm
 import os
 import numpy as np
@@ -117,7 +117,7 @@ class BasicTrainer:
         metrics = {'loss': avg_loss}
         if self.config['dataset']['dataset_type'] == 'classification':
             accuracy = np.mean(np.array(all_preds) == np.array(all_labels))
-            self.writer.add_scalar('Accuracy/test', accuracy, epoch)
+            self.writer.add_scalar('Accuracy/test', accuracy * 100, epoch)
             metrics['accuracy'] = accuracy
 
         return metrics

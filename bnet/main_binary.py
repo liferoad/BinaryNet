@@ -22,9 +22,10 @@ def main():
 
     # 4. Create directories for logging and checkpoints
     log_dir_base = config['general']['log_dir']
-    run_name = f"binary_{config['dataset']['dataset_type']}_{config['training']['optimizer']}_{config['training']['loss_function']}_{config['general']['seed']}"
+    run_name = f"binary_{config['training']['optimizer']}_{config['training']['loss_function']}_{config['general']['seed']}"
     log_dir = os.path.join(log_dir_base, run_name)
     create_dirs([log_dir])
+    config['general']['log_dir'] = log_dir # Update config with the specific run log_dir
 
     # 5. Save a copy of the config to the log directory for this run
     config_save_path = os.path.join(log_dir, 'config.yaml')

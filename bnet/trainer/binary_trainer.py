@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.utils.tensorboard.writer import SummaryWriter
+import os
 from tqdm import tqdm
 
 class BinaryTrainer:
@@ -12,7 +13,8 @@ class BinaryTrainer:
         self.config = config
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
-        self.writer = SummaryWriter(log_dir=config['general']['log_dir'])
+        self.log_dir = os.path.join(config['general']['log_dir'], f"binary_{config['training']['optimizer']}_{config['training']['loss_function']}_{config['general']['seed']}")
+        self.writer = SummaryWriter(log_dir=self.log_dir)
 
         # Optimizer and loss function
         self.optimizer = self._create_optimizer()

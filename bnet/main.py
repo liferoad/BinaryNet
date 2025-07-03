@@ -26,6 +26,9 @@ def main():
     log_dir = os.path.join(log_dir_base, run_name)
     create_dirs([log_dir])
 
+    # Update config with the full log directory path for the trainer
+    config['general']['log_dir'] = log_dir
+
     # 5. Save a copy of the config to the log directory for this run
     config_save_path = os.path.join(log_dir, 'config.yaml')
     with open(config_save_path, 'w') as f:
