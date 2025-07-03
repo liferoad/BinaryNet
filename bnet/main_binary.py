@@ -4,13 +4,13 @@ import yaml
 
 from bnet.utils.project_utils import set_seed, load_config, create_dirs
 from bnet.data.toy_dataset import get_toy_dataloaders
-from bnet.models.simple_fcnn import build_model
+from bnet.models.binary_fcnn import build_model
 from bnet.trainer.basic_trainer import BasicTrainer
 
 def main():
-    """Main function to run the experiment."""
+    """Main function to run the experiment with binary neural network."""
     # 1. Parse command-line arguments
-    parser = argparse.ArgumentParser(description="A simple PyTorch FCNN toy project.")
+    parser = argparse.ArgumentParser(description="A PyTorch Binary Neural Network toy project.")
     parser.add_argument('--config', type=str, required=True, help='Path to the configuration file.')
     args = parser.parse_args()
 
@@ -22,7 +22,7 @@ def main():
 
     # 4. Create directories for logging and checkpoints
     log_dir_base = config['general']['log_dir']
-    run_name = f"{config['dataset']['dataset_type']}_{config['training']['optimizer']}_{config['training']['loss_function']}_{config['general']['seed']}"
+    run_name = f"binary_{config['dataset']['dataset_type']}_{config['training']['optimizer']}_{config['training']['loss_function']}_{config['general']['seed']}"
     log_dir = os.path.join(log_dir_base, run_name)
     create_dirs([log_dir])
 
@@ -36,17 +36,18 @@ def main():
     train_loader, test_loader = get_toy_dataloaders(config)
     print("Data loaded.")
 
-    # 7. Build the model
-    print("Building model...")
+    # 7. Build the binary model
+    print("Building binary neural network model...")
     model = build_model(config)
     print(model)
-    print("Model built.")
+    print("Binary model built.")
 
     # 8. Initialize and run the trainer
     print("Initializing trainer...")
     trainer = BasicTrainer(model, train_loader, test_loader, config)
     print("Trainer initialized. Starting training...")
     trainer.train()
+    print("Training finished.")
 
 if __name__ == "__main__":
     main()

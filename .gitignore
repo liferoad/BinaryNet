@@ -1,5 +1,6 @@
 # model
-runs
+runs_binary/
+runs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
