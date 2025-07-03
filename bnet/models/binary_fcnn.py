@@ -3,29 +3,39 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class BinaryLinear(nn.Linear):
-    """A linear layer with binary weights (-1 or 1)."""
+    """A linear layer with binary weights (-1 or 1) and straight-through estimator."""
     def __init__(self, in_features, out_features, bias=True):
         super(BinaryLinear, self).__init__(in_features, out_features, bias)
-        
+
     def forward(self, input):
         # Binarize weights to -1 or 1
-        binary_weight = torch.sign(self.weight)
-        # Handle the case where weight is exactly 0 (sign returns 0 for 0)
-        binary_weight = torch.where(binary_weight == 0, torch.ones_like(binary_weight), binary_weight)
+        binary_weight = _SignActivationFunction.apply(self.weight)
         
         return F.linear(input, binary_weight, self.bias)
 
-class SignActivation(nn.Module):
-    """Sign activation function that outputs -1 or 1."""
-    def __init__(self):
-        super(SignActivation, self).__init__()
-        
-    def forward(self, input):
+class _SignActivationFunction(torch.autograd.Function):
+    """Sign activation function with straight-through estimator for gradients."""
+    @staticmethod
+    def forward(ctx, input):
         # Apply sign function to get -1, 0, or 1
         output = torch.sign(input)
         # Convert any 0s to 1s to ensure only -1 or 1 outputs
         output = torch.where(output == 0, torch.ones_like(output), output)
+        ctx.save_for_backward(input)
         return output
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        input, = ctx.saved_tensors
+        # Straight-through estimator: gradient is 1 for inputs in [-1, 1], 0 otherwise
+        grad_input = grad_output.clone()
+        grad_input[input.abs() > 1] = 0
+        return grad_input
+
+class SignActivation(nn.Module):
+    """Wrapper module for SignActivation function."""
+    def forward(self, x):
+        return _SignActivationFunction.apply(x)
 
 class BinaryFCNN(nn.Module):
     """A Fully Connected Neural Network with binary weights and activations."""

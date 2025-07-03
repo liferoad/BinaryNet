@@ -11,7 +11,7 @@ dataset:
 # Model Configuration
 model:
   input_size: 20
-  hidden_sizes: [64, 32]
+  hidden_sizes: [128, 64, 32]
   output_size: 1 # For BCEWithLogitsLoss, or 2 for CrossEntropyLoss
 
 # Training Configuration
@@ -19,8 +19,8 @@ training:
   epochs: 100  # More epochs for binary networks
   batch_size: 64  # Larger batch size
   learning_rate: 0.01  # Higher learning rate for binary networks
-  optimizer: SGD  # SGD often works better for binary networks
-  loss_function: BCEWithLogitsLoss # BCEWithLogitsLoss, CrossEntropyLoss, or MSELoss
+  optimizer: Adam  # SGD often works better for binary networks
+  loss_function: MSELoss # BCEWithLogitsLoss, CrossEntropyLoss, or MSELoss
 
 # General Configuration
 general:

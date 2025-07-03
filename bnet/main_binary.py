@@ -5,7 +5,7 @@ import yaml
 from bnet.utils.project_utils import set_seed, load_config, create_dirs
 from bnet.data.toy_dataset import get_toy_dataloaders
 from bnet.models.binary_fcnn import build_model
-from bnet.trainer.basic_trainer import BasicTrainer
+from bnet.trainer.binary_trainer import BinaryTrainer
 
 def main():
     """Main function to run the experiment with binary neural network."""
@@ -44,7 +44,7 @@ def main():
 
     # 8. Initialize and run the trainer
     print("Initializing trainer...")
-    trainer = BasicTrainer(model, train_loader, test_loader, config)
+    trainer = BinaryTrainer(model, train_loader, test_loader, config)
     print("Trainer initialized. Starting training...")
     trainer.train()
     print("Training finished.")
