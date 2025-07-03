@@ -11,7 +11,7 @@ dataset:
 # Model Configuration
 model:
   input_size: 20
-  hidden_sizes: [64, 32]
+  hidden_sizes: [128, 64, 32]
   output_size: 1 # For BCEWithLogitsLoss, or 2 for CrossEntropyLoss
 
 # Training Configuration

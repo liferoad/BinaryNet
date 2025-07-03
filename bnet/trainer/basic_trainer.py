@@ -141,5 +141,12 @@ class BasicTrainer:
             if (epoch + 1) % 10 == 0:
                 torch.save(self.model.state_dict(), os.path.join(self.log_dir, f'checkpoint_epoch_{epoch+1}.pth'))
 
+            # Print test loss and accuracy in the same style as BinaryTrainer
+            if self.config['dataset']['dataset_type'] == 'classification':
+                accuracy = metrics.get('accuracy', 0) * 100  # convert to percent
+                print(f"Epoch [{epoch+1}/{self.config['training']['epochs']}], Test Loss: {metrics['loss']:.4f}, Test Accuracy: {accuracy:.2f}%")
+            else:
+                print(f"Epoch [{epoch+1}/{self.config['training']['epochs']}], Test Loss: {metrics['loss']:.4f}")
+
         self.writer.close()
         print("Training finished.")
